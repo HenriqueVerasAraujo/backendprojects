@@ -8,14 +8,22 @@ const getAll = async (_req, res) => {
       return res.status(500).json({ error });
     }
   };
-const test = async(_req, res) => {
+
+const getOneById = async (req, res) => {
+  const { id } = req.params;
   try {
-    return res.status(200).json('deu certo');
-  } catch (error) {
-    return res.status(500).json({ error });
+    const singleProduct = await productsService.getOneById(id);
+    if (singleProduct.status === 404) {
+      return res.status(singleProduct.status).json(singleProduct.error);
+    } else {
+      return res.status(200).json(singleProduct);
+    }
+  } catch(err) {
+    return res.status(500).json({ err });
   }
-}
+};
+
   module.exports = {
     getAll,
-    test,
+    getOneById,
 }
